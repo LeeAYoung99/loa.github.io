@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>오늘의 로아 운세</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>오늘의 로아 운세</h1>
+    <input type="text" id="nickname" placeholder="닉네임을 입력하세요">
+    <button onclick="getFortune()">운세 보기</button>
+    <div id="result"></div>
+
+    <script>
+        function getFortune() {
+            const nickname = document.getElementById("nickname").value;
+            if (!nickname) {
+                alert("닉네임을 입력해주세요.");
+                return;
+            }
+
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+
+            const seed = nickname + formattedDate;
+            const seedValue = seed.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
+            const enhancementFortuneIndex = Math.abs(seedValue) % 10;
+            const dropFortuneIndex = Math.abs(seedValue + 1) % 10;
+
+            let enhancementFortune, dropFortune, enhancementComment, dropComment;
+            if (enhancementFortuneIndex < 2) {
+                enhancementFortune = "좋음";
+                enhancementComment = "오늘 누르면 붙음";
+            } else if (enhancementFortuneIndex < 5) {
+                enhancementFortune = "보통";
+                enhancementComment = "적당히 누르면 평균은 볼 것만 같은 날.";
+            } else {
+                enhancementFortune = "나쁨";
+                enhancementComment = "오늘은 왠지 장기만 쌓이고 아무 일도 일어나지 않을 것 같다.";
+            }
+
+            if (dropFortuneIndex < 2) {
+                dropFortune = "좋음";
+                dropComment = "오늘은 비틱방에 글을 올릴 수 있을 것 같다";
+            } else {
+                dropFortune = "나쁨";
+                dropComment = "카게 필보 무득!";
+            }
+
+            document.getElementById("result").innerHTML = `
+                ${nickname}님의 ${formattedDate}의 운세:<br>
+                강화운: ${enhancementFortune} - ${enhancementComment}<br>
+                득템운: ${dropFortune} - ${dropComment}
+            `;
+        }
+    </script>
+</body>
+</html>
